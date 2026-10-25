@@ -17,14 +17,14 @@ function getEmptyLevelGrid(size: number): Tile[][] {
   );
   
   for (var i = 1; i < size - 1; i++) {
-    grid[i][0] = new Tile(TileType.WallN);
-    grid[i][size - 1] = new Tile(TileType.WallS);
-    grid[0][i] = new Tile(TileType.WallW);
-    grid[size - 1][i] = new Tile(TileType.WallE);
+    grid[0][i] = new Tile(TileType.WallN);
+    grid[i][0] = new Tile(TileType.WallW);
+    grid[size - 1][i] = new Tile(TileType.WallS);
+    grid[i][size - 1] = new Tile(TileType.WallE);
   }
   grid[0][0] = new Tile(TileType.WallNW);
-  grid[size - 1][0] = new Tile(TileType.WallNE);
-  grid[0][size - 1] = new Tile(TileType.WallSW);
+  grid[0][size - 1] = new Tile(TileType.WallNE);
+  grid[size - 1][0] = new Tile(TileType.WallSW);
   grid[size - 1][size - 1] = new Tile(TileType.WallSE);
 
   return grid;
