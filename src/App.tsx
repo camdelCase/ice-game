@@ -1,15 +1,5 @@
 import { useState } from 'react'
 import './App.css'
-import wallNwImg from './assets/wall-nw.png'
-import wallNeImg from './assets/wall-ne.png'
-import wallSwImg from './assets/wall-sw.png'
-import wallSeImg from './assets/wall-se.png'
-import wallNImg from './assets/wall-n.png'
-import wallEImg from './assets/wall-e.png'
-import wallSImg from './assets/wall-s.png'
-import wallWImg from './assets/wall-w.png'
-import iceImg from './assets/ice.png'
-import ballImg from './assets/ball.png'
 import { Tile, TileType }from './tile.tsx'
 
 function getEmptyLevelGrid(size: number): Tile[][] {
@@ -33,9 +23,19 @@ function getEmptyLevelGrid(size: number): Tile[][] {
 
 function getLevelGrid(size: number): Tile[][] {
   let grid = getEmptyLevelGrid(size);
-
+  let entranceAndExitPos = getEntranceAndExit(size);
+  let entrancePos = entranceAndExitPos[0];
+  let exitPos = entranceAndExitPos[1];
+  grid[entrancePos[0]][entrancePos[1]] = new Tile(TileType.Ice);
+  grid[exitPos[0]][exitPos[1]] = new Tile(TileType.Ice);
+  grid[size - 4][entrancePos[1]] = new Tile(TileType.Rock);
+  grid[size - 5][exitPos[1] + 1] = new Tile(TileType.Rock);
   return grid;
 }
+
+function getEntranceAndExit(size: number): number[][] {
+  return [[0, 2], [size - 1, size - 3]];
+} 
 
 function App() {
   const [count, setCount] = useState(0);
