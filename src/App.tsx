@@ -1,9 +1,14 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import iceImg from './assets/ice.png'
 import wallNwImg from './assets/wall-nw.png'
-import './App.css'
+import wallNeImg from './assets/wall-ne.png'
+import wallSwImg from './assets/wall-sw.png'
+import wallSeImg from './assets/wall-se.png'
+import wallNImg from './assets/wall-n.png'
+import wallEImg from './assets/wall-e.png'
+import wallSImg from './assets/wall-s.png'
+import wallWImg from './assets/wall-w.png'
+import iceImg from './assets/ice.png'
+import ballImg from './assets/ball.png'
 
 const TileType = {
   WallNW: 0,
