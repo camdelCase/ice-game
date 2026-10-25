@@ -8,6 +8,7 @@ import wallEImg from './assets/wall-e.png'
 import wallSImg from './assets/wall-s.png'
 import wallWImg from './assets/wall-w.png'
 import iceImg from './assets/ice.png'
+import rockImg from './assets/rock1.png'
 import ballImg from './assets/ball.png'
 
 export const TileType = {
@@ -20,7 +21,8 @@ export const TileType = {
   WallS: 6,
   WallW: 7,
   Ice: 8,
-  Ball: 9
+  Rock: 9,
+  Ball: 10
 }
 
 export class Tile {
@@ -56,6 +58,9 @@ export class Tile {
         break;
       case TileType.Ice:
         this.image = iceImg; 
+        break;
+      case TileType.Rock:
+        this.image = rockImg;
         break;
       default:
         this.image = ballImg; 
