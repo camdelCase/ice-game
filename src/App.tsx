@@ -46,7 +46,7 @@ function App() {
       <section id="center">
         <div
           id="grid-container"
-          style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, 32px)`, gap: 0 }}
+          style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, 64px)`, gap: 0 }}
         >
           {levelGrid.flatMap((row, rowIndex) =>
             row.map((tile, colIndex) => (
@@ -56,7 +56,7 @@ function App() {
                 data-row={rowIndex}
                 data-col={colIndex}
               >
-                <img src={tile.image} width="32" height="32" alt="" />
+                <img src={tile.image} width="64" height="64" alt="" style={{ display: 'block' }} />
               </div>
             ))
           )}
