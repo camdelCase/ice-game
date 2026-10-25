@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './App.css'
 import wallNwImg from './assets/wall-nw.png'
 import wallNeImg from './assets/wall-ne.png'
 import wallSwImg from './assets/wall-sw.png'
