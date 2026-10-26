@@ -1,4 +1,4 @@
-import { Tile, TileType } from '../tile.tsx'
+import { Tile, TileType } from '../models/Tile.tsx'
 
 
 function getEntranceAndExit(size: number): number[][] {
