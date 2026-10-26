@@ -9,7 +9,7 @@ import wallSImg from './assets/wall-s.png'
 import wallWImg from './assets/wall-w.png'
 import iceImg from './assets/ice.png'
 import rockImg from './assets/rock1.png'
-import ballImg from './assets/ball.png'
+import ballImg from './assets/ball-on-ice.png'
 
 export const TileType = {
   WallNW: 0,
