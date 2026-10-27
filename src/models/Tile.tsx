@@ -28,39 +28,49 @@ export const TileType = {
 export class Tile {
   tileType: string;
   image: string;
+  collidable: boolean;
 
   constructor(tileType: string) {
     this.tileType = tileType;
     switch (tileType) {
       case TileType.WallNW:
         this.image = wallNwImg; 
+        this.collidable = true;
         break;
       case TileType.WallNE:
-        this.image = wallNeImg; 
+        this.image = wallNeImg;  
+        this.collidable = true;
         break;
       case TileType.WallSW:
-        this.image = wallSwImg; 
+        this.image = wallSwImg;  
+        this.collidable = true;
         break;
       case TileType.WallSE:
-        this.image = wallSeImg; 
+        this.image = wallSeImg;  
+        this.collidable = true;
         break;
       case TileType.WallN:
-        this.image = wallNImg; 
+        this.image = wallNImg;  
+        this.collidable = true;
         break;
       case TileType.WallE:
-        this.image = wallEImg; 
+        this.image = wallEImg;  
+        this.collidable = true;
         break;
       case TileType.WallS:
-        this.image = wallSImg; 
+        this.image = wallSImg;  
+        this.collidable = true;
         break;
       case TileType.WallW:
-        this.image = wallWImg; 
+        this.image = wallWImg;  
+        this.collidable = true;
         break;
       case TileType.Ice:
         this.image = iceImg; 
         break;
       case TileType.Rock:
-        this.image = rockImg;
+        this.image = rockImg; 
+        this.collidable = true;
         break;
       default:
         this.image = ballImg; 
