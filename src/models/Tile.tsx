@@ -67,6 +67,7 @@ export class Tile {
         break;
       case TileType.Ice:
         this.image = iceImg; 
+        this.collidable = false;
         break;
       case TileType.Rock:
         this.image = rockImg; 
@@ -74,6 +75,7 @@ export class Tile {
         break;
       default:
         this.image = ballImg; 
+        this.collidable = false;
     }
   }
 }

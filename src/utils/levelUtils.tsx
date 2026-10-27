@@ -1,7 +1,7 @@
 import { Tile, TileType } from '../models/Tile.tsx'
 
 
-function getEntranceAndExit(size: number): number[][] {
+export function getEntranceAndExit(size: number): number[][] {
   return [[0, 2], [size - 1, size - 3]];
 } 
 
@@ -24,11 +24,8 @@ function getEmptyLevelGrid(size: number): Tile[][] {
   return grid;
 }
 
-export function getLevelGrid(size: number): Tile[][] {
+export function getLevelGrid(size: number, entrancePos: number[], exitPos: number[]): Tile[][] {
   let grid = getEmptyLevelGrid(size);
-  let entranceAndExitPos = getEntranceAndExit(size);
-  let entrancePos = entranceAndExitPos[0];
-  let exitPos = entranceAndExitPos[1];
   grid[entrancePos[0]][entrancePos[1]] = new Tile(TileType.Ball);
   grid[exitPos[0]][exitPos[1]] = new Tile(TileType.Ice);
   grid[size - 4][entrancePos[1]] = new Tile(TileType.Rock);
