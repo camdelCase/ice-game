@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import { getLevelGrid } from './utils/levelUtils.tsx';
+import { GameEngine } from './game.tsx';
 
 function App() {
   const [size, setSize] = useState(8);
-  const startLevelGrid = getLevelGrid(size);
-  const [levelGrid, setLevelGrid] = useState(startLevelGrid);
+
+  const gameEngine = new GameEngine(size);
 
   return (
     <>
@@ -14,7 +14,7 @@ function App() {
           id="grid-container"
           style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, 64px)`, gap: 0 }}
         >
-          {levelGrid.flatMap((row, rowIndex) =>
+          {gameEngine.getSnapshot().levelGrid.flatMap((row, rowIndex) =>
             row.map((tile, colIndex) => (
               <div
                 key={`${rowIndex}-${colIndex}`}
