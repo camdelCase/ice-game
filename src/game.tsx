@@ -122,11 +122,16 @@ export class GameEngine {
      */
     private update(): void {
         let levelGrid = this.state.levelGrid.map(row => [...row]);
-        
+
         let playerMoved = this.handlePlayerMove(levelGrid);
         if (playerMoved) {
             let newState: GameState = { levelGrid };
             this.setState(newState);
+        }
+
+        let reachedExit = (this.playerPos[0] == this.endPos[0]) && (this.playerPos[1] == this.endPos[1])
+        if (reachedExit) {
+            this.win();
         }
     }
 
@@ -190,11 +195,27 @@ export class GameEngine {
                 return [this.playerPos[0], this.playerPos[1] + 1];
         }
     }
+    
+    /**
+     * Gets a new level when player wins and updates state
+     * 
+     * @param levelSize Size of level grid
+     */
+    private getNewLevel(levelSize: number = 8) {
+        let entranceAndExitPos = getEntranceAndExit(levelSize);
+        this.startPos = entranceAndExitPos[0];
+        this.endPos = entranceAndExitPos[1];
+        this.playerPos = this.startPos;
+        this.moveDirection = MoveDirection.None;
+        this.lastMoveTime = 0;
+
+        let levelGrid = getLevelGrid(this.levelSize, this.startPos, this.endPos);
+        let newState: GameState = { levelGrid };
+        this.setState(newState);
+    }
 
     private win() {
-
-        // Handle case when player wins the level
-
+        this.getNewLevel(this.levelSize);
         return;
     }
 }
