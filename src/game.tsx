@@ -1,6 +1,14 @@
 import { Tile, TileType } from './models/Tile'
 import { getLevelGrid } from './utils/levelUtils'
 
+export const MoveDirection = {
+    None: "NONE",
+    Up: "UP",
+    Down: "DOWN",
+    Left: "LEFT",
+    Right: "RIGHT"
+} as const;
+
 export type GameState = {
     levelGrid: Tile[][];
 }
