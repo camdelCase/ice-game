@@ -19,16 +19,14 @@ export class GameEngine {
     private frameId: number = 0;
     private levelSize: number = 8;
     private lastMoveTime: number = 0;
-    private travelTime: number = 0.2;
+    private travelTime: number = 0.075;
     private moveDirection: string = MoveDirection.None;
     private startPos: number[];
     private endPos: number[];
-
-    public playerPos: number[];
-
-    // Update state with setState for listener to catch update
-    private state: GameState;
     private listeners = new Set<() => void>();
+    private state: GameState; // Update with setState for listener to catch update
+    
+    public playerPos: number[];
 
     constructor(levelSize: number = 8) {
         this.levelSize = levelSize;
@@ -41,6 +39,11 @@ export class GameEngine {
         this.playerPos = this.startPos;
     }
 
+    /**
+     * Add listener for game state changes
+     * 
+     * @param listener Event listener
+     */
     public subscribe = (listener: () => void): (() => void) => {
         this.listeners.add(listener);
         return () => {
@@ -48,15 +51,28 @@ export class GameEngine {
         };
     }
 
+    /**
+     * Get current game state
+     * 
+     * @returns State of game (level grid)
+     */
     public getSnapshot = (): GameState => {
         return this.state;
     }
 
+    /**
+     * Updates the game state and notify listeners
+     * 
+     * @param newState New state to overwrite current game state
+     */
     private setState(newState: Partial<GameState>): void {
         this.state = { ...this.state, ...newState };
         this.listeners.forEach(listener => listener());
     }
 
+    /**
+     * Start game loop
+     */
     public start(): void {
         if (this.isRunning) {
             return;
@@ -66,17 +82,30 @@ export class GameEngine {
         this.frameId = requestAnimationFrame(this.loop);
     }
 
+    /**
+     * Stop game loop
+     */
     public stop(): void {
         this.isRunning = false;
         cancelAnimationFrame(this.frameId);
     }
 
+    /**
+     * Handle a user input for moving the player
+     * 
+     * @param moveDirection Input move direction
+     */
     public registerMoveInput(moveDirection: string): void {
         if (this.moveDirection == MoveDirection.None) {
             this.moveDirection = moveDirection;
         }
     }
 
+    /**
+     * Game loop
+     * 
+     * @param currentTime Current system time
+     */
     private loop = (currentTime: number): void => {
         if (!this.isRunning) {
             return;
@@ -88,6 +117,9 @@ export class GameEngine {
         this.frameId = requestAnimationFrame(this.loop);
     }
 
+    /**
+     * Handle player moves and update game state if changed
+     */
     private update(): void {
         let levelGrid = this.state.levelGrid.map(row => [...row]);
         
@@ -102,7 +134,7 @@ export class GameEngine {
      * Attempt to move player
      * 
      * @param levelGrid  - Working level grid
-     * @returns Boolean indicating where or not the player moved
+     * @returns Boolean indicating whether or not the player moved
      */
     private handlePlayerMove(levelGrid: Tile[][]): boolean {
         if ((this.moveDirection == MoveDirection.None)) {
@@ -128,12 +160,24 @@ export class GameEngine {
         return true;
     }
     
+    /**
+     * Check if the player is unable to advance to the next tile
+     * 
+     * @param levelGrid Current working level grid
+     * @param nextPos Position the player is attempting to move to
+     * @returns Boolean representing whether the player has hit an obstacle
+     */
     private checkHitObstacle(levelGrid: Tile[][], nextPos: number[]): boolean {
         let nextTile = levelGrid[nextPos[0]][nextPos[1]];
         let outOfBounds = ((nextPos[0] < 0) || (nextPos[0] >= this.levelSize) || (nextPos[1] < 0) || (nextPos[1] >= this.levelSize)) 
         return nextTile.collidable || outOfBounds;
     }
 
+    /**
+     * Get the next position the player will move to if possible
+     * 
+     * @returns Array with row and column of the tile the player would move to next
+     */
     private getNextPos(): number[] {
         switch (this.moveDirection) {
             case MoveDirection.Up:
