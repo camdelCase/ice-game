@@ -12,24 +12,24 @@ import rockImg from '../assets/rock1.png'
 import ballImg from '../assets/ball-on-ice.png'
 
 export const TileType = {
-  WallNW: 0,
-  WallNE: 1,
-  WallSW: 2,
-  WallSE: 3,
-  WallN: 4,
-  WallE: 5,
-  WallS: 6,
-  WallW: 7,
-  Ice: 8,
-  Rock: 9,
-  Ball: 10
-}
+  WallNW: "WALL_NW",
+  WallNE: "WALL_NE",
+  WallSW: "WALL_SW",
+  WallSE: "WALL_SE",
+  WallN: "WALL_N",
+  WallE: "WALL_E",
+  WallS: "WALL_S",
+  WallW: "WALL_W",
+  Ice: "ICE",
+  Rock: "ROCK",
+  Ball: "BALL"
+} as const;
 
 export class Tile {
-  tileType: number;
+  tileType: string;
   image: string;
 
-  constructor(tileType: number) {
+  constructor(tileType: string) {
     this.tileType = tileType;
     switch (tileType) {
       case TileType.WallNW:
