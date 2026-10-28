@@ -11,11 +11,11 @@ export const MoveDirection = {
 
 export type GameState = {
     levelGrid: Tile[][];
+    won: boolean;
 }
 
 export class GameEngine {
     private isRunning: boolean = false;
-    private lastTime: number = 0;
     private frameId: number = 0;
     private levelSize: number = 8;
     private lastMoveTime: number = 0;
@@ -31,6 +31,11 @@ export class GameEngine {
     
     public playerPos: number[];
 
+    /**
+     * Constructor
+     * 
+     * @param levelSize Size of level grid
+     */
     constructor(levelSize: number = 8) {
         this.levelSize = levelSize;
         
@@ -38,7 +43,7 @@ export class GameEngine {
         this.startPos = entranceAndExitPos[0];
         this.endPos = entranceAndExitPos[1];
 
-        this.state = { levelGrid: getLevelGrid(this.levelSize, this.startPos, this.endPos) };
+        this.state = { levelGrid: getLevelGrid(this.levelSize, this.startPos, this.endPos), won: false };
         this.playerPos = this.startPos;
     }
 
@@ -81,7 +86,6 @@ export class GameEngine {
             return;
         }
         this.isRunning = true;
-        this.lastTime = performance.now();
         this.frameId = requestAnimationFrame(this.loop);
     }
 
@@ -106,16 +110,12 @@ export class GameEngine {
 
     /**
      * Game loop
-     * 
-     * @param currentTime Current system time
      */
-    private loop = (currentTime: number): void => {
+    private loop = (): void => {
         if (!this.isRunning) {
             return;
         }
 
-        const dt = (currentTime - this.lastTime) / 1000;
-        this.lastTime = currentTime;
         this.update();
         this.frameId = requestAnimationFrame(this.loop);
     }
@@ -140,7 +140,7 @@ export class GameEngine {
 
         let playerMoved = this.handlePlayerMove(levelGrid);
         if (playerMoved) {
-            let newState: GameState = { levelGrid };
+            let newState: GameState = { levelGrid: levelGrid, won: false };
             this.setState(newState);
         }
     }
@@ -230,14 +230,17 @@ export class GameEngine {
         this.won = false;
 
         let levelGrid = getLevelGrid(this.levelSize, this.startPos, this.endPos);
-        let newState: GameState = { levelGrid };
+        let newState: GameState = { levelGrid: levelGrid, won: false };
         this.setState(newState);
     }
 
+    /**
+     * Handle player winning the level by updating fields related to winning and notifying listeners
+     */
     private win() {
         this.won = true;
         this.winTime = performance.now();
-        this.listeners.forEach(listener => listener());
+        this.setState({ won: true });
         return;
     }
 }

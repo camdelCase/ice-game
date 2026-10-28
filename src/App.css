@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+.font-8bit {
+  font-family: 'Press Start 2P', system-ui, sans-serif;
+  color: '#000000';
+  image-rendering: pixelated;
+}
+
+.font-arcade {
+  font-family: 'VT323', system-ui, sans-serif;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

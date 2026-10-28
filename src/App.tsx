@@ -28,7 +28,7 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [gameEngine]);
 
-  const { levelGrid } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
+  const { levelGrid, won } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
 
   return (
     <>
@@ -49,6 +49,9 @@ function App() {
               </div>
             ))
           )}
+        </div>
+        <div>
+          <h1 className='font-8bit' style={{ visibility: won ? 'visible' : 'hidden' }}>LEVEL COMPLETED!</h1>
         </div>
       </section>
     </>
