@@ -20,6 +20,9 @@ export class GameEngine {
     private levelSize: number = 8;
     private lastMoveTime: number = 0;
     private travelTime: number = 0.075;
+    private winDuration: number = 1;
+    private winTime: number = 0;
+    private won: boolean = false;
     private moveDirection: string = MoveDirection.None;
     private startPos: number[];
     private endPos: number[];
@@ -123,15 +126,22 @@ export class GameEngine {
     private update(): void {
         let levelGrid = this.state.levelGrid.map(row => [...row]);
 
+        let reachedExit = (this.playerPos[0] == this.endPos[0]) && (this.playerPos[1] == this.endPos[1])
+        if (reachedExit && !this.won) {
+            this.win();
+        }
+        if (this.won) {
+            let winAnimationOver = ((performance.now() - this.winTime) / 1000) >= this.winDuration;
+            if (winAnimationOver) {
+                this.getNewLevel();
+            }
+            return;
+        }
+
         let playerMoved = this.handlePlayerMove(levelGrid);
         if (playerMoved) {
             let newState: GameState = { levelGrid };
             this.setState(newState);
-        }
-
-        let reachedExit = (this.playerPos[0] == this.endPos[0]) && (this.playerPos[1] == this.endPos[1])
-        if (reachedExit) {
-            this.win();
         }
     }
 
@@ -152,10 +162,9 @@ export class GameEngine {
         }
 
         let nextPos = this.getNextPos();
-
-        if (this.checkHitObstacle(levelGrid, nextPos)) {
-            this.moveDirection = MoveDirection.None
-            return false;
+        if (this.checkOutOfBounds(nextPos) || this.checkHitObstacle(levelGrid, nextPos)) {
+            this.moveDirection = MoveDirection.None;
+            return false
         }
 
         levelGrid[this.playerPos[0]][this.playerPos[1]] = new Tile(TileType.Ice);
@@ -163,6 +172,16 @@ export class GameEngine {
         this.playerPos = nextPos;
         this.lastMoveTime = currentTime;
         return true;
+    }
+
+    /**
+     * Check if player is attempting to travel out of bounds
+     * 
+     * @param nextPos row, col coordinate of player's next position
+     * @returns Boolean representing whether or not the next position is out of bounds
+     */
+    private checkOutOfBounds(nextPos: number[]): boolean {
+        return ((nextPos[0] < 0) || (nextPos[0] >= this.levelSize) || (nextPos[1] < 0) || (nextPos[1] >= this.levelSize));
     }
     
     /**
@@ -201,13 +220,14 @@ export class GameEngine {
      * 
      * @param levelSize Size of level grid
      */
-    private getNewLevel(levelSize: number = 8) {
-        let entranceAndExitPos = getEntranceAndExit(levelSize);
+    private getNewLevel() {
+        let entranceAndExitPos = getEntranceAndExit(this.levelSize);
         this.startPos = entranceAndExitPos[0];
         this.endPos = entranceAndExitPos[1];
         this.playerPos = this.startPos;
         this.moveDirection = MoveDirection.None;
         this.lastMoveTime = 0;
+        this.won = false;
 
         let levelGrid = getLevelGrid(this.levelSize, this.startPos, this.endPos);
         let newState: GameState = { levelGrid };
@@ -215,7 +235,9 @@ export class GameEngine {
     }
 
     private win() {
-        this.getNewLevel(this.levelSize);
+        this.won = true;
+        this.winTime = performance.now();
+        this.listeners.forEach(listener => listener());
         return;
     }
 }
