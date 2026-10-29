@@ -1,53 +1,24 @@
-import { Tile, TileType } from '../models/Tile.tsx'
+import { Level } from '../models/Level.tsx';
+
+const levelDir: string = '../levels/';
+const levelPrefix: string = 'level_';
+const levelFiles = import.meta.glob('../levels/level_*.json', { eager: true, import: 'default' });
 
 /**
- * Get a randomized start position and end position for a level of given size
+ * Loads the given level from the levels directory
  * 
- * @param size Level grid size
- * @returns 2D Array storing [row, col] for start and end position
+ * @param levelNum Number of level to load
  */
-export function getEntranceAndExit(size: number): number[][] {
-  return [[0, 2], [size - 1, size - 3]];
-} 
+export function loadLevel(levelNum: number): Level {
+  let levelPath = `${levelDir}${levelPrefix}${levelNum.toString()}.json`;
+  let level = Level.fromJSON(levelFiles[levelPath]);
 
-/**
- * Create a level grid with ice and walls, but no rocks
- * 
- * @param size Level grid size
- * @returns Level grid with ice and walls, but no rocks
- */
-function getEmptyLevelGrid(size: number): Tile[][] {
-  let grid: Tile[][] = Array.from({ length: size }, () => 
-    new Array(size).fill(new Tile(TileType.Ice))
-  );
-  
-  for (var i = 1; i < size - 1; i++) {
-    grid[0][i] = new Tile(TileType.WallN);
-    grid[i][0] = new Tile(TileType.WallW);
-    grid[size - 1][i] = new Tile(TileType.WallS);
-    grid[i][size - 1] = new Tile(TileType.WallE);
-  }
-  grid[0][0] = new Tile(TileType.WallNW);
-  grid[0][size - 1] = new Tile(TileType.WallNE);
-  grid[size - 1][0] = new Tile(TileType.WallSW);
-  grid[size - 1][size - 1] = new Tile(TileType.WallSE);
-
-  return grid;
+  return level;
 }
 
 /**
- * Gets a valid level with ice, walls, rocks, and a player
- * 
- * @param size Level grid size
- * @param entrancePos Start position
- * @param exitPos End position to win the level
- * @returns Fully populated level grid
+ * Gets the number of the last level in the levels directory
  */
-export function getLevelGrid(size: number, entrancePos: number[], exitPos: number[]): Tile[][] {
-  let grid = getEmptyLevelGrid(size);
-  grid[entrancePos[0]][entrancePos[1]] = new Tile(TileType.Ball);
-  grid[exitPos[0]][exitPos[1]] = new Tile(TileType.Ice);
-  grid[size - 4][entrancePos[1]] = new Tile(TileType.Rock);
-  grid[size - 5][exitPos[1] + 1] = new Tile(TileType.Rock);
-  return grid;
+export function getMaxLevel(): number {
+  return Object.keys(levelFiles).length;
 }

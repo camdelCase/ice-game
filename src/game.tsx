@@ -1,5 +1,5 @@
 import { Tile, TileType } from './models/Tile'
-import { getLevelGrid, getEntranceAndExit } from './utils/levelUtils'
+import { loadLevel } from './utils/levelUtils'
 
 export const MoveDirection = {
     None: "NONE",
@@ -11,6 +11,7 @@ export const MoveDirection = {
 
 export type GameState = {
     levelGrid: Tile[][];
+    levelNum: number;
     won: boolean;
 }
 
@@ -26,6 +27,7 @@ export class GameEngine {
     private moveDirection: string = MoveDirection.None;
     private startPos: number[];
     private endPos: number[];
+    private levelNum: number;
     private listeners = new Set<() => void>();
     private state: GameState; // Update with setState for listener to catch update
     
@@ -36,14 +38,15 @@ export class GameEngine {
      * 
      * @param levelSize Size of level grid
      */
-    constructor(levelSize: number = 8) {
-        this.levelSize = levelSize;
-        
-        let entranceAndExitPos = getEntranceAndExit(levelSize);
-        this.startPos = entranceAndExitPos[0];
-        this.endPos = entranceAndExitPos[1];
+    constructor(levelNum = 1) {
+        let level = loadLevel(levelNum);
 
-        this.state = { levelGrid: getLevelGrid(this.levelSize, this.startPos, this.endPos), won: false };
+        this.levelNum = levelNum;
+        this.levelSize = level.size;
+        this.startPos = level.entrance;
+        this.endPos = level.exit;
+
+        this.state = { levelGrid: level.grid!, levelNum: levelNum, won: false };
         this.playerPos = this.startPos;
     }
 
@@ -140,7 +143,7 @@ export class GameEngine {
 
         let playerMoved = this.handlePlayerMove(levelGrid);
         if (playerMoved) {
-            let newState: GameState = { levelGrid: levelGrid, won: false };
+            let newState: GameState = { levelGrid: levelGrid, levelNum: this.levelNum, won: false };
             this.setState(newState);
         }
     }
@@ -221,16 +224,18 @@ export class GameEngine {
      * @param levelSize Size of level grid
      */
     private getNewLevel() {
-        let entranceAndExitPos = getEntranceAndExit(this.levelSize);
-        this.startPos = entranceAndExitPos[0];
-        this.endPos = entranceAndExitPos[1];
-        this.playerPos = this.startPos;
+        this.levelNum++;
+        let newLevel = loadLevel(this.levelNum);
+
+        this.levelSize = newLevel.size;
+        this.startPos = newLevel.entrance;
+        this.endPos = newLevel.exit;
+        this.playerPos = newLevel.entrance;
         this.moveDirection = MoveDirection.None;
         this.lastMoveTime = 0;
         this.won = false;
 
-        let levelGrid = getLevelGrid(this.levelSize, this.startPos, this.endPos);
-        let newState: GameState = { levelGrid: levelGrid, won: false };
+        let newState: GameState = { levelGrid: newLevel.grid!, levelNum: this.levelNum, won: false };
         this.setState(newState);
     }
 

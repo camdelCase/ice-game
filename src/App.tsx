@@ -1,10 +1,10 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import './App.css'
-import { GameEngine, MoveDirection } from './game.tsx';
+import { GameEngine, MoveDirection } from './game.tsx'
 
 function App() {
-  const size = 8;
-  const [gameEngine] = useState(() => new GameEngine(size));
+  const level = 1;
+  const [gameEngine] = useState(() => new GameEngine(level));
 
   useEffect(() => {
     gameEngine.start();
@@ -38,7 +38,7 @@ function App() {
         </div>
         <div
           id="grid-container"
-          style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, 64px)`, gap: 0 }}
+          style={{ display: 'grid', gridTemplateColumns: `repeat(${levelGrid.length}, 64px)`, gap: 0 }}
         >
           {levelGrid.flatMap((row, rowIndex) =>
             row.map((tile, colIndex) => (
