@@ -33,6 +33,9 @@ function App() {
   return (
     <>
       <section id="center">
+        <div>
+          <h1 className='font-8bit' style={{ marginTop: '50px', marginBottom: '100px' }}>ICE SLIDER</h1>
+        </div>
         <div
           id="grid-container"
           style={{ display: 'grid', gridTemplateColumns: `repeat(${size}, 64px)`, gap: 0 }}
@@ -45,13 +48,13 @@ function App() {
                 data-row={rowIndex}
                 data-col={colIndex}
               >
-                <img src={tile.image} width="64" height="64" alt="" style={{ display: 'block' }} />
+                <img src={tile.image} width="64" height="64" alt="" style={{ display: 'block', imageRendering: 'pixelated' }} />
               </div>
             ))
           )}
         </div>
         <div>
-          <h1 className='font-8bit' style={{ visibility: won ? 'visible' : 'hidden' }}>LEVEL COMPLETED!</h1>
+          <h2 className='font-8bit' style={{ visibility: won ? 'visible' : 'hidden', marginTop: '50px', fontSize: '30px' }}>LEVEL COMPLETED!</h2>
         </div>
       </section>
     </>
