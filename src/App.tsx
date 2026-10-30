@@ -34,13 +34,17 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [gameEngine]);
 
-  const { levelGrid, won } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
+  const { levelGrid, levelNum, won } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
 
   return (
     <>
       <section id="center">
         <div>
-          <h1 className='font-8bit' style={{ marginTop: '50px', marginBottom: '100px' }}>ICE SLIDER</h1>
+          <h1 className="font-8bit" style={{ marginTop: '50px', marginBottom: '50px', fontSize: '45px' }}>ICE SLIDER</h1>
+        </div>
+        <div className="row-container">
+          <h3 className="font-8bit" style={{ marginTop: '10px', marginBottom: '10px', color: '#000000', textAlign: 'center', gridColumn: 2 }}>{`LEVEL ${levelNum}`}</h3>
+          <button className="button-8bit" onClick={() => gameEngine.registerRestartInput()} style={{ gridColumn: 3, justifySelf: 'end', marginRight: '25%'}}>RESTART<br />LEVEL (R)</button>
         </div>
         <div
           id="grid-container"
@@ -60,7 +64,7 @@ function App() {
           )}
         </div>
         <div>
-          <h2 className='font-8bit' style={{ visibility: won ? 'visible' : 'hidden', marginTop: '50px', fontSize: '30px' }}>LEVEL COMPLETED!</h2>
+          <h2 className="font-8bit" style={{ visibility: won ? 'visible' : 'hidden', marginTop: '50px', fontSize: '30px' }}>LEVEL COMPLETED!</h2>
         </div>
       </section>
     </>
