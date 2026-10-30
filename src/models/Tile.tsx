@@ -1,4 +1,3 @@
-
 import wallNwImg from '../assets/wall-nw.png'
 import wallNeImg from '../assets/wall-ne.png'
 import wallSwImg from '../assets/wall-sw.png'
@@ -8,8 +7,12 @@ import wallEImg from '../assets/wall-e.png'
 import wallSImg from '../assets/wall-s.png'
 import wallWImg from '../assets/wall-w.png'
 import iceImg from '../assets/ice.png'
-import rockImg from '../assets/rock1.png'
-import ballImg from '../assets/ball-on-ice.png'
+import rockImg2 from '../assets/rock2.png'
+import rockImg3 from '../assets/rock3.png'
+import rockImg4 from '../assets/rock4.png'
+import ballImg from '../assets/ball-on-ice-3.png'
+
+const rockImgs = [rockImg2, rockImg3, rockImg4];
 
 export const TileType = {
   WallNW: "WALL_NW",
@@ -70,7 +73,8 @@ export class Tile {
         this.collidable = false;
         break;
       case TileType.Rock:
-        this.image = rockImg; 
+        let rockImgIndex = Math.floor(3 * Math.random());
+        this.image = rockImgs[rockImgIndex]; 
         this.collidable = true;
         break;
       default:
