@@ -112,6 +112,23 @@ export class GameEngine {
     }
 
     /**
+     * Handle a user input to restart the level. In the future, this will require holding down
+     * the restart button for an amount of time, but for now, instantly restarts the level
+     */
+    public registerRestartInput(): void {
+        this.restartLevel();
+    }
+
+    /**
+     * Restart the current level
+     * TODO: Edit getNewLevel function to take levelNum as an input
+     */
+    private restartLevel(): void {
+        this.levelNum--;
+        this.getNewLevel();
+    }
+
+    /**
      * Game loop
      */
     private loop = (): void => {

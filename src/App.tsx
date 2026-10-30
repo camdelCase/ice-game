@@ -6,11 +6,13 @@ function App() {
   const level = 1;
   const [gameEngine] = useState(() => new GameEngine(level));
 
+  // Start game engine
   useEffect(() => {
     gameEngine.start();
     return () => gameEngine.stop();
   }, [gameEngine]);
 
+  // Catch when user inputs a movement key or 'r' to restart
   useEffect(() => {
     const keyToDirection: Record<string, string> = {
       ArrowUp: MoveDirection.Up,    w: MoveDirection.Up,
@@ -20,9 +22,13 @@ function App() {
     };
     const onKeyDown = (e: KeyboardEvent) => {
       const direction = keyToDirection[e.key];
-      if (!direction) return;
-      e.preventDefault();               // stop arrow keys scrolling the page
-      gameEngine.registerMoveInput(direction);
+      if (direction) {
+        e.preventDefault();
+        gameEngine.registerMoveInput(direction);
+      } else if ((e.key === "r") || e.key === "R") {
+        e.preventDefault();
+        gameEngine.registerRestartInput();
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
