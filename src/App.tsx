@@ -46,7 +46,7 @@ function App() {
               style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 50px)', gridTemplateRows: 'repeat(5, 32px)', gap: '5px'}}
             >
               {Array.from({ length: 20 }, (_, i) => i + 1).map(num => (
-                <button key={num} className="button-8bit" style={{ fontSize: '15px', width: '50px', height: '32px' }}>
+                <button key={num} className="button-8bit" onClick={() => gameEngine.getLevel(num)} style={{ fontSize: '15px', width: '50px', height: '32px' }}>
                   {num}
                 </button>
               ))}
