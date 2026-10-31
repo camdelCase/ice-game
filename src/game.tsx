@@ -125,7 +125,7 @@ export class GameEngine {
      */
     private restartLevel(): void {
         this.levelNum--;
-        this.getNewLevel();
+        this.getNextLevel();
     }
 
     /**
@@ -153,7 +153,7 @@ export class GameEngine {
         if (this.won) {
             let winAnimationOver = ((performance.now() - this.winTime) / 1000) >= this.winDuration;
             if (winAnimationOver) {
-                this.getNewLevel();
+                this.getNextLevel();
             }
             return;
         }
@@ -240,10 +240,19 @@ export class GameEngine {
      * 
      * @param levelSize Size of level grid
      */
-    private getNewLevel() {
+    private getNextLevel() {
         this.levelNum++;
-        let newLevel = loadLevel(this.levelNum);
+        this.getLevel(this.levelNum);
+    }
 
+    /**
+     * Loads a level with the given level number
+     * 
+     * @param levelNum 
+     */
+    private getLevel(levelNum: number) {
+        let newLevel = loadLevel(levelNum);
+        this.levelNum = levelNum;
         this.levelSize = newLevel.size;
         this.startPos = newLevel.entrance;
         this.endPos = newLevel.exit;
@@ -252,7 +261,7 @@ export class GameEngine {
         this.lastMoveTime = 0;
         this.won = false;
 
-        let newState: GameState = { levelGrid: newLevel.grid!, levelNum: this.levelNum, won: false };
+        let newState: GameState = { levelGrid: newLevel.grid!, levelNum: levelNum, won: false };
         this.setState(newState);
     }
 
