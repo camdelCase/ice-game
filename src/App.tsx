@@ -34,7 +34,7 @@ function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [gameEngine]);
 
-  const { levelGrid, levelNum, won } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
+  const { levelGrid, levelNum, won, maxLevelCompleted } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
 
   return (
     <>
@@ -45,11 +45,21 @@ function App() {
               id="level-select-grid-container"
               style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 50px)', gridTemplateRows: 'repeat(5, 32px)', gap: '5px'}}
             >
-              {Array.from({ length: 20 }, (_, i) => i + 1).map(num => (
-                <button key={num} className="button-8bit" onClick={() => gameEngine.getLevel(num)} style={{ fontSize: '15px', width: '50px', height: '32px' }}>
-                  {num}
-                </button>
-              ))}
+              {Array.from({ length: 20 }, (_, i) => i + 1).map(num => {
+                const solved = num <= maxLevelCompleted;
+                const locked = num > maxLevelCompleted + 1;
+                return (
+                  <button
+                    key={num}
+                    className={`button-8bit${solved ? ' level-solved' : ''}`}
+                    disabled={locked}
+                    onClick={() => gameEngine.getLevel(num)}
+                    style={{ fontSize: '15px', width: '50px', height: '32px' }}
+                  >
+                    {num}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>

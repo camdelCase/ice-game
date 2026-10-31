@@ -13,6 +13,7 @@ export type GameState = {
     levelGrid: Tile[][];
     levelNum: number;
     won: boolean;
+    maxLevelCompleted: number;
 }
 
 export class GameEngine {
@@ -46,7 +47,7 @@ export class GameEngine {
         this.startPos = level.entrance;
         this.endPos = level.exit;
 
-        this.state = { levelGrid: level.grid!, levelNum: levelNum, won: false };
+        this.state = { levelGrid: level.grid!, levelNum: levelNum, won: false, maxLevelCompleted: 0 };
         this.playerPos = this.startPos;
     }
 
@@ -160,7 +161,7 @@ export class GameEngine {
 
         let playerMoved = this.handlePlayerMove(levelGrid);
         if (playerMoved) {
-            let newState: GameState = { levelGrid: levelGrid, levelNum: this.levelNum, won: false };
+            let newState: GameState = { levelGrid: levelGrid, levelNum: this.levelNum, won: false, maxLevelCompleted: this.state.maxLevelCompleted };
             this.setState(newState);
         }
     }
@@ -261,7 +262,7 @@ export class GameEngine {
         this.lastMoveTime = 0;
         this.won = false;
 
-        let newState: GameState = { levelGrid: newLevel.grid!, levelNum: levelNum, won: false };
+        let newState: GameState = { levelGrid: newLevel.grid!, levelNum: levelNum, won: false, maxLevelCompleted: this.state.maxLevelCompleted };
         this.setState(newState);
     }
 
@@ -271,7 +272,7 @@ export class GameEngine {
     private win() {
         this.won = true;
         this.winTime = performance.now();
-        this.setState({ won: true });
+        this.setState({ won: true, maxLevelCompleted: Math.max(this.state.maxLevelCompleted, this.levelNum) });
         return;
     }
 }
