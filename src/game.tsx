@@ -122,11 +122,9 @@ export class GameEngine {
 
     /**
      * Restart the current level
-     * TODO: Edit getNewLevel function to take levelNum as an input
      */
     private restartLevel(): void {
-        this.levelNum--;
-        this.getNextLevel();
+        this.getLevel(this.levelNum);
     }
 
     /**
@@ -154,7 +152,7 @@ export class GameEngine {
         if (this.won) {
             let winAnimationOver = ((performance.now() - this.winTime) / 1000) >= this.winDuration;
             if (winAnimationOver) {
-                this.getNextLevel();
+                this.getLevel(this.levelNum + 1);
             }
             return;
         }
@@ -235,23 +233,13 @@ export class GameEngine {
                 return [this.playerPos[0], this.playerPos[1] + 1];
         }
     }
-    
-    /**
-     * Gets a new level when player wins and updates state
-     * 
-     * @param levelSize Size of level grid
-     */
-    private getNextLevel() {
-        this.levelNum++;
-        this.getLevel(this.levelNum);
-    }
 
     /**
      * Loads a level with the given level number
      * 
      * @param levelNum 
      */
-    private getLevel(levelNum: number) {
+    public getLevel(levelNum: number) {
         let newLevel = loadLevel(levelNum);
         this.levelNum = levelNum;
         this.levelSize = newLevel.size;
