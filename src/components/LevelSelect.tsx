@@ -1,0 +1,93 @@
+import React from "react";
+
+interface LevelSelectProps {
+    pageNum: number,
+    maxPageNum: number,
+    maxLevelCompleted: number, 
+    onClickLevel: (levelNum: number) => void,
+    onClickPageLeft: React.MouseEventHandler<HTMLButtonElement>,
+    onClickPageRight: React.MouseEventHandler<HTMLButtonElement>
+}
+
+interface LevelSelectPageProps {
+    pageNum: number,
+    maxLevelCompleted: number,
+    onClick: (levelNum: number) => void
+}
+
+interface LevelSelectNavButtonLeftProps {
+    pageNum: number,
+    onClick: React.MouseEventHandler<HTMLButtonElement>
+}
+
+interface LevelSelectNavButtonRightProps {
+    pageNum: number,
+    maxPageNum: number,
+    onClick: React.MouseEventHandler<HTMLButtonElement>
+}
+
+
+export function LevelSelectNavButtonLeft({ pageNum, onClick }: LevelSelectNavButtonLeftProps) {
+    return(
+        <button 
+            onClick={onClick} 
+            disabled={pageNum === 0}
+        >
+        {"<"}
+        </button>
+    );
+    
+}
+
+export function LevelSelectNavButtonRight({ pageNum, maxPageNum, onClick }: LevelSelectNavButtonRightProps) {
+
+    return(
+        <button 
+            onClick={onClick} 
+            disabled={pageNum >= maxPageNum}
+        >
+        {">"}
+        </button>
+    );
+}
+
+export function LevelSelect({ pageNum, maxPageNum, maxLevelCompleted, onClickLevel, onClickPageLeft, onClickPageRight }: LevelSelectProps) {
+    return(
+        <div id="level-select" style={{ alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
+            {LevelSelectPage({ pageNum, maxLevelCompleted, onClick: onClickLevel })}
+            <div id="level-select-nav-buttons">
+                {LevelSelectNavButtonLeft({ pageNum, onClick: onClickPageLeft })}
+                {LevelSelectNavButtonRight({ pageNum, maxPageNum, onClick: onClickPageRight })}
+            </div>
+        </div>
+    );
+}
+
+export function LevelSelectPage({ pageNum, maxLevelCompleted, onClick }: LevelSelectPageProps) {
+    return(
+        <div
+            id="level-select-grid-container"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 50px)', gridTemplateRows: 'repeat(5, 32px)', gap: '5px'}}
+        >
+            {Array.from({ length: 20 }, (_, i) => i + 1).map(num => {
+                const levelNum = (20 * pageNum) + num;
+                const solved = levelNum <= maxLevelCompleted;
+                const locked = levelNum > maxLevelCompleted + 1;
+                return (
+                    <button
+                        key={levelNum}
+                        className={`button-8bit${solved ? ' level-solved' : ''}`}
+                        disabled={locked}
+                        onClick={(e) => {
+                            e.currentTarget.blur();
+                            onClick(levelNum);
+                        }}
+                        style={{ fontSize: '15px', width: '50px', height: '32px' }}
+                    >
+                    {levelNum}
+                </button>
+                );
+            })}
+        </div>
+    );
+}
