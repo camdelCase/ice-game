@@ -53,7 +53,7 @@ function App() {
                     key={num}
                     className={`button-8bit${solved ? ' level-solved' : ''}`}
                     disabled={locked}
-                    onClick={() => gameEngine.getLevel(num)}
+                    onClick={(e) => { e.currentTarget.blur(); gameEngine.getLevel(num); }}
                     style={{ fontSize: '15px', width: '50px', height: '32px' }}
                   >
                     {num}
@@ -69,7 +69,6 @@ function App() {
           </div>
           <div className="row-container">
             <h3 className="font-8bit" style={{ marginTop: '10px', marginBottom: '10px', color: '#000000', textAlign: 'center', gridColumn: 2 }}>{`LEVEL ${levelNum}`}</h3>
-            <button className="button-8bit" onClick={() => gameEngine.registerRestartInput()} style={{ gridColumn: 3, justifySelf: 'end', marginRight: '25%'}}>RESTART<br />LEVEL (R)</button>
           </div>
           <div
             id="game-grid-container"
@@ -92,7 +91,11 @@ function App() {
             <h2 className="font-8bit" style={{ visibility: won ? 'visible' : 'hidden', marginTop: '50px', fontSize: '30px' }}>LEVEL COMPLETED!</h2>
           </div>
         </section>
-        <section id="right"><h1></h1></section>
+        <section id="right">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
+            <button className="button-8bit" onClick={(e) => { e.currentTarget.blur(); gameEngine.registerRestartInput(); }} style={{ gridColumn: 3, justifySelf: 'end', marginRight: '25%'}}>RESTART<br />LEVEL (R)</button>
+          </div>
+        </section>
       </div>
     </>
   )
