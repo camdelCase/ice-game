@@ -1,10 +1,39 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import './App.css'
 import { GameEngine, MoveDirection } from './game.tsx'
+import { getMaxLevel } from './utils/levelUtils.tsx';
+
+function getLevelSelectPage(gameEngine: GameEngine, maxLevelCompleted: number, pageNum: number) {
+  return(
+    <div
+      id="level-select-grid-container"
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 50px)', gridTemplateRows: 'repeat(5, 32px)', gap: '5px'}}
+    >
+      {Array.from({ length: 20 }, (_, i) => i + 1).map(num => {
+        const levelNum = (20 * pageNum) + num;
+        const solved = levelNum <= maxLevelCompleted;
+        const locked = levelNum > maxLevelCompleted + 1;
+        return (
+          <button
+            key={num}
+            className={`button-8bit${solved ? ' level-solved' : ''}`}
+            disabled={locked}
+            onClick={(e) => { e.currentTarget.blur(); gameEngine.getLevel(num); }}
+            style={{ fontSize: '15px', width: '50px', height: '32px' }}
+          >
+            {num}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 function App() {
   const level = 1;
+  const maxLevel = getMaxLevel();
   const [gameEngine] = useState(() => new GameEngine(level));
+  const [levelSelectPageNum, setLevelSelectPageNum] = useState(0);
 
   // Start game engine
   useEffect(() => {
@@ -40,26 +69,21 @@ function App() {
     <>
       <div className="column-container">
         <section id="left">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
-            <div
-              id="level-select-grid-container"
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 50px)', gridTemplateRows: 'repeat(5, 32px)', gap: '5px'}}
-            >
-              {Array.from({ length: 20 }, (_, i) => i + 1).map(num => {
-                const solved = num <= maxLevelCompleted;
-                const locked = num > maxLevelCompleted + 1;
-                return (
-                  <button
-                    key={num}
-                    className={`button-8bit${solved ? ' level-solved' : ''}`}
-                    disabled={locked}
-                    onClick={(e) => { e.currentTarget.blur(); gameEngine.getLevel(num); }}
-                    style={{ fontSize: '15px', width: '50px', height: '32px' }}
-                  >
-                    {num}
-                  </button>
-                );
-              })}
+          <div id="level-select" style={{ alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
+            {getLevelSelectPage(gameEngine, maxLevelCompleted, levelSelectPageNum)}
+            <div id="level-select-nav-buttons">
+              <button 
+                onClick={() => { setLevelSelectPageNum(levelSelectPageNum - 1) }} 
+                disabled={levelSelectPageNum === 0}
+              >
+                {"<"}
+              </button>
+              <button 
+                onClick={() => { setLevelSelectPageNum(levelSelectPageNum + 1) }} 
+                disabled={(levelSelectPageNum * 20) >= maxLevel}
+              >
+                {">"}
+              </button>
             </div>
           </div>
         </section>
