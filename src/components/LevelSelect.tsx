@@ -1,4 +1,5 @@
 import React from "react";
+import '../App.css';
 
 interface LevelSelectProps {
     pageNum: number,
@@ -26,25 +27,27 @@ interface LevelSelectNavButtonRightProps {
     onClick: React.MouseEventHandler<HTMLButtonElement>
 }
 
-
 export function LevelSelectNavButtonLeft({ pageNum, onClick }: LevelSelectNavButtonLeftProps) {
     return(
         <button 
+            className="button-8bit"
             onClick={onClick} 
             disabled={pageNum === 0}
+            style={{width: '32px', height: '24px'}}
         >
         {"<"}
         </button>
     );
-    
 }
 
 export function LevelSelectNavButtonRight({ pageNum, maxPageNum, onClick }: LevelSelectNavButtonRightProps) {
 
     return(
         <button 
+            className="button-8bit"
             onClick={onClick} 
             disabled={pageNum >= maxPageNum}
+            style={{width: '32px', height: '24px'}}
         >
         {">"}
         </button>
@@ -53,9 +56,9 @@ export function LevelSelectNavButtonRight({ pageNum, maxPageNum, onClick }: Leve
 
 export function LevelSelect({ pageNum, maxPageNum, maxLevelCompleted, onClickLevel, onClickPageLeft, onClickPageRight }: LevelSelectProps) {
     return(
-        <div id="level-select" style={{ alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
+        <div id="level-select" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
             {LevelSelectPage({ pageNum, maxLevelCompleted, onClick: onClickLevel })}
-            <div id="level-select-nav-buttons">
+            <div id="level-select-nav-buttons" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '80px', marginTop: '10px' }}>
                 {LevelSelectNavButtonLeft({ pageNum, onClick: onClickPageLeft })}
                 {LevelSelectNavButtonRight({ pageNum, maxPageNum, onClick: onClickPageRight })}
             </div>
