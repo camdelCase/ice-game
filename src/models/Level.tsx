@@ -1,4 +1,4 @@
-import { Tile, TileType } from './Tile.tsx';
+import { Tile, TileType, WallOpenDirection } from './Tile.tsx';
 
 export class Level {
     size: number;
@@ -40,6 +40,44 @@ export class Level {
         return grid;
     }
 
+    static setOpenWalls(levelGrid: Tile[][], size: number, openingPos: number[]) {
+        let row = openingPos[0];
+        let col = openingPos[1];
+
+        if (row == 0) {
+            levelGrid[0][col - 1] = new Tile(TileType.WallN, WallOpenDirection.Right);
+            levelGrid[0][col + 1] = new Tile(TileType.WallN, WallOpenDirection.Left);
+            if (col - 1 == 0)
+                levelGrid[0][0] = new Tile(TileType.WallNW, WallOpenDirection.Right);
+            else if (col + 1 == size - 1)
+                levelGrid[0][col + 1] = new Tile(TileType.WallNE, WallOpenDirection.Left);
+        }
+        else if (row == size - 1) {
+            levelGrid[row][col - 1] = new Tile(TileType.WallS, WallOpenDirection.Right);
+            levelGrid[row][col + 1] = new Tile(TileType.WallS, WallOpenDirection.Left);
+            if (col - 1 == 0)
+                levelGrid[0][0] = new Tile(TileType.WallSW, WallOpenDirection.Right);
+            else if (col + 1 == size - 1)
+                levelGrid[0][col + 1] = new Tile(TileType.WallSE, WallOpenDirection.Left);
+        }
+        else if (col == 0) {
+            levelGrid[row - 1][0] = new Tile(TileType.WallW, WallOpenDirection.Down);
+            levelGrid[row + 1][0] = new Tile(TileType.WallW, WallOpenDirection.Up);
+            if (row - 1 == 0)
+                levelGrid[0][0] = new Tile(TileType.WallNW, WallOpenDirection.Down);
+            else if (row + 1 == size - 1)
+                levelGrid[row + 1][0] = new Tile(TileType.WallSW, WallOpenDirection.Up);
+        }
+        else {
+            levelGrid[row - 1][col] = new Tile(TileType.WallE, WallOpenDirection.Down);
+            levelGrid[row + 1][col] = new Tile(TileType.WallE, WallOpenDirection.Up);
+            if (row - 1 == 0)
+                levelGrid[0][col] = new Tile(TileType.WallNE, WallOpenDirection.Down);
+            else if (row + 1 == size - 1)
+                levelGrid[row + 1][col] = new Tile(TileType.WallSE, WallOpenDirection.Up);
+        }
+    }
+
     /**
      * Creates a valid level with ice, walls, rocks, and a player
      * 
@@ -50,6 +88,8 @@ export class Level {
      */
     static createLevelGrid(size: number, entrancePos: number[], exitPos: number[], rocks: number[][]) {
         let grid = this.getEmptyLevelGrid(size);
+        this.setOpenWalls(grid, size, entrancePos);
+        this.setOpenWalls(grid, size, exitPos);
         
         grid[entrancePos[0]][entrancePos[1]] = new Tile(TileType.Ball);
         grid[exitPos[0]][exitPos[1]] = new Tile(TileType.Ice);
