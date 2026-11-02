@@ -41,6 +41,7 @@ function App() {
   }, [gameEngine]);
 
   const { levelGrid, levelNum, won, maxLevelCompleted } = useSyncExternalStore(gameEngine.subscribe, gameEngine.getSnapshot);
+  const gridSize = `round(down, min(${levelGrid.length * 64}px, 100cqw, 75vh), ${levelGrid.length}px)`;
 
   function onClickLevel(levelNum: number) {
     gameEngine.getLevel(levelNum);
@@ -76,7 +77,14 @@ function App() {
           </div>
           <div
             id="game-grid-container"
-            style={{ display: 'grid', gridTemplateColumns: `repeat(${levelGrid.length}, 64px)`, gap: 0 }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${levelGrid.length}, 1fr)`,
+              gridTemplateRows: `repeat(${levelGrid.length}, 1fr)`,
+              width: gridSize,
+              height: gridSize,
+              gap: 0
+            }}
           >
             {levelGrid.flatMap((row, rowIndex) =>
               row.map((tile, colIndex) => (
@@ -86,7 +94,7 @@ function App() {
                   data-row={rowIndex}
                   data-col={colIndex}
                 >
-                  <img src={tile.image} width="64" height="64" alt="" style={{ display: 'block', imageRendering: 'pixelated' }} />
+                  <img src={tile.image} alt="" style={{ display: 'block', width: '100%', height: '100%', imageRendering: 'pixelated' }} />
                 </div>
               ))
             )}
