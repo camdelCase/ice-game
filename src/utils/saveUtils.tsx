@@ -22,11 +22,11 @@ function loadNewSaveData(): SaveData {
  */
 export function loadSaveData(): SaveData {
     let savePath = `${saveDir}${savePrefix}${saveID}.json`;
-    let save = SaveData.fromJSON(saveFiles[savePath]);
+    let saveJSON = saveFiles[savePath];
 
-    if (!save) {
-        save = loadNewSaveData();
+    if (saveJSON) {
+        return SaveData.fromJSON(saveJSON);
     }
 
-    return save;
+    return loadNewSaveData();
 }

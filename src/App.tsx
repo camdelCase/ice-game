@@ -1,15 +1,19 @@
 import './App.css';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { GameEngine, MoveDirection } from './game.tsx';
+import { SaveData } from './models/SaveData.tsx';
+import { loadSaveData } from './utils/saveUtils.tsx';
 import { getMaxLevel } from './utils/levelUtils.tsx';
 import { LevelSelect } from './components/LevelSelect.tsx';
 
 function App() {
-  const level = 1;
   const levelsPerPage = 20;
   const maxLevel = getMaxLevel();
   const maxLevelSelectPage = Math.ceil(maxLevel / levelsPerPage) - 1;
-  const [gameEngine] = useState(() => new GameEngine(level));
+  let saveData: SaveData = loadSaveData();
+  
+  const level = Math.min(saveData.maxLevelCompleted + 1, maxLevel);
+  const [gameEngine] = useState(() => new GameEngine(level, saveData.maxLevelCompleted));
   const [levelSelectPageNum, setLevelSelectPageNum] = useState(0);
 
   // Start game engine

@@ -39,7 +39,7 @@ export class GameEngine {
      * 
      * @param levelSize Size of level grid
      */
-    constructor(levelNum = 1) {
+    constructor(levelNum: number, maxLevelCompleted: number) {
         let level = loadLevel(levelNum);
 
         this.levelNum = levelNum;
@@ -47,7 +47,7 @@ export class GameEngine {
         this.startPos = level.entrance;
         this.endPos = level.exit;
 
-        this.state = { levelGrid: level.grid!, levelNum: levelNum, won: false, maxLevelCompleted: 0 };
+        this.state = { levelGrid: level.grid!, levelNum: levelNum, won: false, maxLevelCompleted: maxLevelCompleted };
         this.playerPos = this.startPos;
     }
 
