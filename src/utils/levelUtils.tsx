@@ -2,6 +2,7 @@ import { Level } from '../models/Level.tsx';
 
 const levelDir: string = '../levels/';
 const levelPrefix: string = 'level_';
+
 const levelFiles = import.meta.glob('../levels/level_*.json', { eager: true, import: 'default' });
 
 /**
