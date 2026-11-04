@@ -1,14 +1,12 @@
-const userDataKey = 'userData';
-
 /**
  * Set, get, or delete data from local storage 
  */
 export const storage = {
-  set<T>(key: string = userDataKey, value: T): void {
+  set<T>(key: string, value: T): void {
     localStorage.setItem(key, JSON.stringify(value));
   },
 
-  get<T>(key: string = userDataKey): T | null {
+  get<T>(key: string): T | null {
     const item = localStorage.getItem(key);
     if (!item) return null;
     try {
@@ -18,7 +16,7 @@ export const storage = {
     }
   },
 
-  remove(key: string = userDataKey): void {
+  remove(key: string): void {
     localStorage.removeItem(key);
   },
 };
